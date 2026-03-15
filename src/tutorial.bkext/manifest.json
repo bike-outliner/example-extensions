@@ -1,0 +1,11 @@
+{
+  "$schema": "../../node_modules/@bike-outliner/extension-kit/schemas/manifest.schema.json",
+  "description": "Example extension from the Bike user guide extension tutorial",
+  "author": "Jesse Grosjean",
+  "url": "https://github.com/jessegrosjean/bike-extension-kit/tree/main/src/tutorial.bkext",
+  "version": "0.0.0",
+  "api_version": "0.0.0",
+  "permissions": [],
+  "host_permissions": [],
+  "install": true
+}
