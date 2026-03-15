@@ -3,7 +3,7 @@
   "description": "Interactive D3.js outline visualization",
   "author": "Jesse Grosjean",
   "url": "https://github.com/jessegrosjean/bike-extension-kit/tree/main/src/d3.bkext",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "api_version": "0.0.0",
   "permissions": [],
   "host_permissions": []

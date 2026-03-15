@@ -3,7 +3,7 @@
   "description": "Style modifier that applies distinct colors to headings based on outline depth",
   "author": "Jesse Grosjean",
   "url": "https://github.com/jessegrosjean/bike-extension-kit/tree/main/src/heading-levels.bkext",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "api_version": "0.0.0",
   "permissions": [],
   "host_permissions": []
