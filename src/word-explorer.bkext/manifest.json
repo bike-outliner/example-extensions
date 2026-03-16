@@ -2,7 +2,7 @@
   "$schema": "../../node_modules/@bike-outliner/extension-kit/schemas/manifest.schema.json",
   "description": "Dictionary and thesaurus lookup for selected words in the inspector sidebar",
   "author": "Jesse Grosjean",
-  "url": "https://github.com/jessegrosjean/bike-extension-kit/tree/main/src/word-explorer.bkext",
+  "url": "https://github.com/bike-outliner/example-extensions/tree/main/src/word-explorer.bkext",
   "version": "0.1.0",
   "api_version": "0.0.0",
   "permissions": [],
