@@ -1,12 +1,16 @@
 import { AppExtensionContext, Window, DOMScriptHandle } from 'bike/app'
 
+type AppToDOMMessage =
+  | { type: 'clear' }
+  | { type: 'wordData'; word: string; definitions: string[]; synonyms: string[] }
+
 type DOMToAppMessage =
   | { type: 'visible'; value: boolean }
   | { type: 'changeWord'; word: string }
 
 export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window: Window) => {
-    const handle = await window.inspector.addItem({
+    const handle = await window.inspector.addItem<AppToDOMMessage, DOMToAppMessage>({
       tab: 'book',
       label: 'Word Explorer',
       script: 'WordExplorer.js',
@@ -43,7 +47,7 @@ export async function activate(context: AppExtensionContext) {
           ) {
             pendingWord = ''
             if (visible) {
-              handle.postMessage({ clear: true })
+              handle.postMessage({ type: 'clear' })
             }
             return
           }
@@ -58,7 +62,7 @@ export async function activate(context: AppExtensionContext) {
   })
 }
 
-async function fetchAndPost(handle: DOMScriptHandle, word: string) {
+async function fetchAndPost(handle: DOMScriptHandle<AppToDOMMessage, DOMToAppMessage>, word: string) {
   try {
     let [dictionaryJSON, synonymsJSON] = await Promise.all([
       (await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)).json(),
@@ -72,6 +76,7 @@ async function fetchAndPost(handle: DOMScriptHandle, word: string) {
       ) || []
     const synonyms = (synonymsJSON as { word: string }[]).map((item) => item.word)
     handle.postMessage({
+      type: 'wordData',
       word: normalizedWord,
       definitions: definitions,
       synonyms: synonyms,

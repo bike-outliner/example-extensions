@@ -1,8 +1,8 @@
-import { DOMExtensionContext } from 'bike/dom'
 import * as d3 from 'd3'
-import { NodeData, activateD3View } from './d3-common'
+import { NodeData, activateD3View, AppToDOMMessage, DOMToAppMessage } from './d3-common'
+import { DOMExtensionContext } from 'bike/dom'
 
-export async function activate(context: DOMExtensionContext) {
+export async function activate(context: DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>) {
   activateD3View(context, {
     createLayout(root, width, height) {
       const radius = Math.min(width, height) / 2

@@ -2,18 +2,22 @@ import { DOMExtensionContext } from 'bike/dom'
 import { createRoot } from 'react-dom/client'
 import { useState, useEffect } from 'react'
 
-type AppToDOMMessage =
-  | { clear: true }
-  | { word: string; definitions: string[]; synonyms: string[] }
+type DOMToAppMessage =
+  | { type: 'visible'; value: boolean }
+  | { type: 'changeWord'; word: string }
 
-export async function activate(context: DOMExtensionContext) {
+type AppToDOMMessage =
+  | { type: 'clear' }
+  | { type: 'wordData'; word: string; definitions: string[]; synonyms: string[] }
+
+export async function activate(context: DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>) {
   const container = context.element
   const root = createRoot(container)
   root.render(<WordExplorer context={context} />)
 }
 
 type WordExplorerProps = {
-  context: DOMExtensionContext
+  context: DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>
 }
 
 const WordExplorer: React.FC<WordExplorerProps> = ({ context }) => {
@@ -23,14 +27,17 @@ const WordExplorer: React.FC<WordExplorerProps> = ({ context }) => {
 
   useEffect(() => {
     context.onmessage = (message: AppToDOMMessage) => {
-      if ('clear' in message) {
-        setCurrentWord('')
-        setCurrentDefinitions([])
-        setCurrentSynonyms([])
-      } else if (message.word && message.synonyms) {
-        setCurrentWord(message.word)
-        setCurrentDefinitions(message.definitions)
-        setCurrentSynonyms(message.synonyms)
+      switch (message.type) {
+        case 'clear':
+          setCurrentWord('')
+          setCurrentDefinitions([])
+          setCurrentSynonyms([])
+          break
+        case 'wordData':
+          setCurrentWord(message.word)
+          setCurrentDefinitions(message.definitions)
+          setCurrentSynonyms(message.synonyms)
+          break
       }
     }
 

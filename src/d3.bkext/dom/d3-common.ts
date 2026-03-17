@@ -27,15 +27,20 @@ export interface D3ViewConfig {
   labelTransform?(d: d3.HierarchyPointNode<NodeData>): string
 }
 
-export function activateD3View(context: DOMExtensionContext, config: D3ViewConfig) {
-  context.onmessage = (message: { type: string; data: NodeData }) => {
+export type AppToDOMMessage = { type: 'load'; data: NodeData }
+export type DOMToAppMessage = { type: 'select'; id: string }
+
+type D3Context = DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>
+
+export function activateD3View(context: D3Context, config: D3ViewConfig) {
+  context.onmessage = (message) => {
     if (message.type == 'load' && message.data) {
       context.element.appendChild(generateSVG(message.data, context, config))
     }
   }
 }
 
-function generateSVG(data: NodeData, context: DOMExtensionContext, config: D3ViewConfig): any {
+function generateSVG(data: NodeData, context: D3Context, config: D3ViewConfig): any {
   const hierarchyRoot = d3.hierarchy(data)
   const width = window.innerWidth
   const height = window.innerHeight

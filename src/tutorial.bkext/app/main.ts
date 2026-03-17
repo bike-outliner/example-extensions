@@ -1,6 +1,19 @@
 import { AppExtensionContext, Row, RowType, CommandContext } from 'bike/app'
 
 export async function activate(context: AppExtensionContext) {
+  bike.observeWindows(async (window) => {
+    await window.inspector.addItem({
+      tab: 'info.circle',
+      label: 'Details',
+      script: 'inspector-details.js',
+    })
+    await window.inspector.addItem({
+      tab: 'info.circle',
+      label: 'Options',
+      script: 'inspector-options.js',
+    })
+  })
+
   bike.commands.addCommands({
     commands: {
       'tutorial:archive-done': archiveDoneCommand,
@@ -47,7 +60,7 @@ function archiveDoneCommand(context: CommandContext): boolean {
 
   // Present the archive done sheet with the count of done rows
   bike.frontmostWindow?.presentSheet('archive-done-sheet.js').then((handle) => {
-    handle.postMessage(doneRows.length)
+    handle.postMessage({ type: 'archiveCount', count: doneRows.length })
   })
 
   return true

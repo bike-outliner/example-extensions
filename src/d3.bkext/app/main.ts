@@ -1,4 +1,4 @@
-import { AppExtensionContext, DOMScript, Row, CommandContext } from 'bike/app'
+import { AppExtensionContext, DOMScript, DOMScriptHandle, Row, CommandContext } from 'bike/app'
 
 interface D3Node {
   [property: string]: string | D3Node[]
@@ -6,6 +6,9 @@ interface D3Node {
   name: string
   children: D3Node[]
 }
+
+type AppToDOMMessage = { type: 'load'; data: D3Node }
+type DOMToAppMessage = { type: 'select'; id: string }
 
 export async function activate(context: AppExtensionContext) {
   bike.commands.addCommands({
@@ -25,7 +28,7 @@ export async function activate(context: AppExtensionContext) {
 async function showD3Sheet(domScriptName: DOMScript) {
   let window = bike.frontmostWindow
   if (window) {
-    let handle = await window.presentSheet(domScriptName)
+    let handle = await window.presentSheet<AppToDOMMessage, DOMToAppMessage>(domScriptName)
     let editor = window.currentOutlineEditor
     if (editor) {
       handle.postMessage({
