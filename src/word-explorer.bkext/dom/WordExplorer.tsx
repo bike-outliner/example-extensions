@@ -1,23 +1,16 @@
 import { DOMExtensionContext } from 'bike/dom'
 import { createRoot } from 'react-dom/client'
 import { useState, useEffect } from 'react'
+import { WordExplorerProtocol } from './protocols'
 
-type DOMToAppMessage =
-  | { type: 'visible'; value: boolean }
-  | { type: 'changeWord'; word: string }
-
-type AppToDOMMessage =
-  | { type: 'clear' }
-  | { type: 'wordData'; word: string; definitions: string[]; synonyms: string[] }
-
-export async function activate(context: DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>) {
+export async function activate(context: DOMExtensionContext<WordExplorerProtocol>) {
   const container = context.element
   const root = createRoot(container)
   root.render(<WordExplorer context={context} />)
 }
 
 type WordExplorerProps = {
-  context: DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>
+  context: DOMExtensionContext<WordExplorerProtocol>
 }
 
 const WordExplorer: React.FC<WordExplorerProps> = ({ context }) => {
@@ -26,7 +19,7 @@ const WordExplorer: React.FC<WordExplorerProps> = ({ context }) => {
   const [currentSynonyms, setCurrentSynonyms] = useState([] as string[])
 
   useEffect(() => {
-    context.onmessage = (message: AppToDOMMessage) => {
+    context.onmessage = (message) => {
       switch (message.type) {
         case 'clear':
           setCurrentWord('')
@@ -44,7 +37,7 @@ const WordExplorer: React.FC<WordExplorerProps> = ({ context }) => {
     const observer = new IntersectionObserver(([entry]) => {
       context.postMessage({ type: 'visible', value: entry.isIntersecting })
     })
-    
+
     observer.observe(context.element)
 
     return () => {

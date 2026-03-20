@@ -1,8 +1,8 @@
 import * as d3 from 'd3'
-import { NodeData, activateD3View, AppToDOMMessage, DOMToAppMessage } from './d3-common'
+import { NodeData, activateD3View, D3Protocol } from './d3-common'
 import { DOMExtensionContext } from 'bike/dom'
 
-export async function activate(context: DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>) {
+export async function activate(context: DOMExtensionContext<D3Protocol>) {
   activateD3View(context, {
     createLayout(root, width) {
       const dx = 14

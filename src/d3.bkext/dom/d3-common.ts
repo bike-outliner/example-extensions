@@ -1,11 +1,8 @@
 import { DOMExtensionContext } from 'bike/dom'
 import * as d3 from 'd3'
+import { NodeData, D3Protocol } from './protocols'
 
-export interface NodeData {
-  id: string
-  name: string
-  children?: NodeData[]
-}
+export type { NodeData }
 
 export interface D3ViewConfig {
   createLayout(
@@ -27,10 +24,9 @@ export interface D3ViewConfig {
   labelTransform?(d: d3.HierarchyPointNode<NodeData>): string
 }
 
-export type AppToDOMMessage = { type: 'load'; data: NodeData }
-export type DOMToAppMessage = { type: 'select'; id: string }
+export type { D3Protocol }
 
-type D3Context = DOMExtensionContext<DOMToAppMessage, AppToDOMMessage>
+type D3Context = DOMExtensionContext<D3Protocol>
 
 export function activateD3View(context: D3Context, config: D3ViewConfig) {
   context.onmessage = (message) => {

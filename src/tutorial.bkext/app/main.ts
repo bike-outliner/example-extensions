@@ -1,14 +1,13 @@
-import { AppExtensionContext, Row, RowType, CommandContext } from 'bike/app'
+import { AppExtensionContext, Row, RowType, CommandContext, PanelHandle } from 'bike/app'
+import { PanelDemoProtocol } from '../dom/protocols'
 
 export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window) => {
     await window.inspector.addItem({
-      tab: 'info.circle',
       label: 'Details',
       script: 'inspector-details.js',
     })
     await window.inspector.addItem({
-      tab: 'info.circle',
       label: 'Options',
       script: 'inspector-options.js',
     })
@@ -21,6 +20,9 @@ export async function activate(context: AppExtensionContext) {
       'tutorial:insert-color-api-demo': insertColorApiDemoCommand,
       'tutorial:status-message-demo': statusMessageDemoCommand,
       'tutorial:components-demo': componentsDemoCommand,
+      'tutorial:panel-inspector': panelInspectorCommand,
+      'tutorial:panel-utility': panelUtilityCommand,
+      'tutorial:panel-window': panelWindowCommand,
     },
   })
 
@@ -127,6 +129,33 @@ function statusMessageDemoCommand(context: CommandContext): boolean {
 
 function componentsDemoCommand(context: CommandContext): boolean {
   bike.frontmostWindow?.presentSheet('components-demo.js')
+  return true
+}
+
+async function showPanelWithRole(role: 'inspector' | 'utility' | 'window'): Promise<boolean> {
+  let handle: PanelHandle<PanelDemoProtocol> = await bike.showPanel<PanelDemoProtocol>({
+    script: 'panel-demo.js',
+    title: `Panel (${role})`,
+    role,
+    width: 580,
+    height: 400,
+  }, bike.frontmostWindow)
+  handle.postMessage({ type: 'role', role })
+  return true
+}
+
+function panelInspectorCommand(): boolean {
+  showPanelWithRole('inspector')
+  return true
+}
+
+function panelUtilityCommand(): boolean {
+  showPanelWithRole('utility')
+  return true
+}
+
+function panelWindowCommand(): boolean {
+  showPanelWithRole('window')
   return true
 }
 

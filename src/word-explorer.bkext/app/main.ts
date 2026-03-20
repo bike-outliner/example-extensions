@@ -1,17 +1,9 @@
 import { AppExtensionContext, Window, DOMScriptHandle } from 'bike/app'
-
-type AppToDOMMessage =
-  | { type: 'clear' }
-  | { type: 'wordData'; word: string; definitions: string[]; synonyms: string[] }
-
-type DOMToAppMessage =
-  | { type: 'visible'; value: boolean }
-  | { type: 'changeWord'; word: string }
+import { WordExplorerProtocol } from '../dom/protocols'
 
 export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window: Window) => {
-    const handle = await window.inspector.addItem<AppToDOMMessage, DOMToAppMessage>({
-      tab: 'book',
+    const handle = await window.inspector.addItem<WordExplorerProtocol>({
       label: 'Word Explorer',
       script: 'WordExplorer.js',
     })
@@ -19,7 +11,7 @@ export async function activate(context: AppExtensionContext) {
     let pendingWord = ''
     let visible = false
 
-    handle.onmessage = (message: DOMToAppMessage) => {
+    handle.onmessage = (message) => {
       switch (message.type) {
         case 'visible':
           visible = message.value
@@ -62,7 +54,7 @@ export async function activate(context: AppExtensionContext) {
   })
 }
 
-async function fetchAndPost(handle: DOMScriptHandle<AppToDOMMessage, DOMToAppMessage>, word: string) {
+async function fetchAndPost(handle: DOMScriptHandle<WordExplorerProtocol>, word: string) {
   try {
     let [dictionaryJSON, synonymsJSON] = await Promise.all([
       (await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)).json(),
