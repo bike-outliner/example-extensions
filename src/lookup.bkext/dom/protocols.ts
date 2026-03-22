@@ -4,7 +4,7 @@
 
 import { DOMProtocol } from 'bike/core'
 
-export interface WordExplorerProtocol extends DOMProtocol {
+export interface LookupProtocol extends DOMProtocol {
   toDOM:
     | { type: 'clear' }
     | { type: 'wordData'; word: string; definitions: string[]; synonyms: string[] }

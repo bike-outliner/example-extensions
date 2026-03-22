@@ -1,11 +1,11 @@
 import { AppExtensionContext, Window, DOMScriptHandle } from 'bike/app'
-import { WordExplorerProtocol } from '../dom/protocols'
+import { LookupProtocol } from '../dom/protocols'
 
 export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window: Window) => {
-    const handle = await window.inspector.addItem<WordExplorerProtocol>({
-      label: 'Word Explorer',
-      script: 'WordExplorer.js',
+    const handle = await window.inspector.addItem<LookupProtocol>({
+      label: 'Lookup',
+      script: 'Lookup.js',
     })
 
     let pendingWord = ''
@@ -54,7 +54,7 @@ export async function activate(context: AppExtensionContext) {
   })
 }
 
-async function fetchAndPost(handle: DOMScriptHandle<WordExplorerProtocol>, word: string) {
+async function fetchAndPost(handle: DOMScriptHandle<LookupProtocol>, word: string) {
   try {
     let [dictionaryJSON, synonymsJSON] = await Promise.all([
       (await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)).json(),
