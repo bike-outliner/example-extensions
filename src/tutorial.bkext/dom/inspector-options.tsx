@@ -11,7 +11,7 @@ function Options() {
   const [count, setCount] = useState(0)
 
   return (
-    <Disclosure label="Options" summary={<Label color="secondary">{count} selected</Label>}>
+    <Disclosure label="Options" accessory={<Label color="secondary">{count} selected</Label>}>
       <FormGroup>
         <FormRow label="Count">
           <Button size="small" onClick={() => setCount(c => c + 1)}>Increment</Button>

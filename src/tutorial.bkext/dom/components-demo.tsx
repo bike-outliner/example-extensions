@@ -209,7 +209,7 @@ function Swatch({ bg, label, light, style }: { bg: string; label: string; light?
   return (
     <div style={{
       background: bg,
-      color: light ? 'var(--alternate-selected-text)' : 'var(--label)',
+      color: light ? 'var(--selected-content-text)' : 'var(--label)',
       padding: '4px 8px',
       borderRadius: 4,
       border: '0.5px solid var(--separator)',
