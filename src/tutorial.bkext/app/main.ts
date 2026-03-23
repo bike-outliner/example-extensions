@@ -139,6 +139,7 @@ async function showPanelWithRole(role: 'inspector' | 'utility' | 'window'): Prom
     role,
     width: 580,
     height: 400,
+    id: `panel-demo-${role}`,
   }, bike.frontmostWindow)
   handle.postMessage({ type: 'role', role })
   return true
