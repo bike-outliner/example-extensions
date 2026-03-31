@@ -7,3 +7,7 @@ import { DOMProtocol } from 'bike/core'
 export interface PanelDemoProtocol extends DOMProtocol {
   toDOM: { type: 'role'; role: string }
 }
+
+export interface ResourceDemoProtocol extends DOMProtocol {
+  toDOM: { type: 'manifest'; data: Record<string, unknown> }
+}

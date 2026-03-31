@@ -1,7 +1,10 @@
 import { AppExtensionContext, Row, RowType, CommandContext, PanelHandle } from 'bike/app'
-import { PanelDemoProtocol } from '../dom/protocols'
+import { PanelDemoProtocol, ResourceDemoProtocol } from '../dom/protocols'
+
+let extensionContext: AppExtensionContext
 
 export async function activate(context: AppExtensionContext) {
+  extensionContext = context
   bike.observeWindows(async (window) => {
     await window.inspector.addItem({
       label: 'Details',
@@ -22,6 +25,7 @@ export async function activate(context: AppExtensionContext) {
       'kitchensink:panel-inspector': panelInspectorCommand,
       'kitchensink:panel-utility': panelUtilityCommand,
       'kitchensink:panel-window': panelWindowCommand,
+      'kitchensink:resource-demo': resourceDemoCommand,
     },
   })
 }
@@ -161,6 +165,24 @@ function insertColorApiDemoCommand(context: CommandContext): boolean {
     let insertLocation = editor.selection?.rows[0] ?? outline.root
     outline.insertRows(demoRows, insertLocation)
   })
+
+  return true
+}
+
+async function resourceDemoCommand(): Promise<boolean> {
+  const handle = await bike.showPanel<ResourceDemoProtocol>({
+    script: 'resource-demo.js',
+    title: 'Resource Demo',
+    role: 'utility',
+    width: 400,
+    height: 400,
+    id: 'kitchensink:resource-demo',
+  }, bike.frontmostWindow)
+
+  // Use readFile to read manifest.json from the extension folder
+  const manifestText = extensionContext.readFile('manifest.json')
+  const manifest = JSON.parse(manifestText)
+  handle.postMessage({ type: 'manifest', data: manifest })
 
   return true
 }
