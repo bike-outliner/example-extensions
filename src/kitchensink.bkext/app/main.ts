@@ -19,7 +19,7 @@ export async function activate(context: AppExtensionContext) {
   bike.commands.addCommands({
     commands: {
       'kitchensink:set-row-type': setRowTypeCommand,
-      'kitchensink:insert-color-api-demo': insertColorApiDemoCommand,
+      'kitchensink:insert-style-demo': insertStyleDemoCommand,
       'kitchensink:status-message-demo': statusMessageDemoCommand,
       'kitchensink:components-demo': componentsDemoCommand,
       'kitchensink:panel-inspector': panelInspectorCommand,
@@ -122,16 +122,16 @@ function panelWindowCommand(): boolean {
   return true
 }
 
-function insertColorApiDemoCommand(context: CommandContext): boolean {
+function insertStyleDemoCommand(context: CommandContext): boolean {
   let editor = context.editor
   if (!editor) return false
 
   let outline = editor.outline
 
-  // Define demo rows showcasing the new color API
+  // Define demo rows styled by the Kitchen Sink editor style
   const demoRows = [
     {
-      text: 'Color API Demo',
+      text: 'Style Demo',
       type: 'heading' as RowType,
     },
     {
@@ -158,6 +158,10 @@ function insertColorApiDemoCommand(context: CommandContext): boolean {
       text: 'HSL Mixing (yellow + cyan → green)',
       attributes: { tags: 'hslmix' },
     },
+    {
+      text: 'Resource Image Background (bike.jpg)',
+      attributes: { tags: 'bikeimg' },
+    },
   ]
 
   outline.transaction({ animate: 'default' }, () => {
@@ -178,11 +182,6 @@ async function resourceDemoCommand(): Promise<boolean> {
     height: 400,
     id: 'kitchensink:resource-demo',
   }, bike.frontmostWindow)
-
-  // Use readFile to read manifest.json from the extension folder
-  const manifestText = extensionContext.readFile('manifest.json')
-  const manifest = JSON.parse(manifestText)
-  handle.postMessage({ type: 'manifest', data: manifest })
 
   return true
 }

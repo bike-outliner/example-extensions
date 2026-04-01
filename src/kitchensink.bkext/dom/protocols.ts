@@ -9,5 +9,4 @@ export interface PanelDemoProtocol extends DOMProtocol {
 }
 
 export interface ResourceDemoProtocol extends DOMProtocol {
-  toDOM: { type: 'manifest'; data: Record<string, unknown> }
 }

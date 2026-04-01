@@ -1,4 +1,4 @@
-import { Color, defineEditorStyle } from 'bike/style'
+import { Color, Image, defineEditorStyle } from 'bike/style'
 
 let style = defineEditorStyle('kitchensink', 'Kitchen Sink')
 
@@ -68,6 +68,20 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
     row.text.decoration('background', (bg) => {
       bg.color = hslMixed.withAlpha(0.5)
       bg.corners.radius = 4
+    })
+  })
+
+  // Demo 7: Resource image as row background
+  // Rows tagged "bikeimg" get the bike.jpg resource as a background image
+  row(`.@tags contains bikeimg`, (context, row) => {
+    let imageURL = extensionURL('resources/bike.jpg')
+    let bikeImage = new Image(imageURL)
+    row.text.decoration('background', (bg) => {
+      bg.contents.image = bikeImage
+      bg.contents.gravity = 'resizeAspect'
+      bg.corners.radius = 4
+      bg.opacity = 1.0
+      bg.zPosition = -10
     })
   })
 })
