@@ -175,8 +175,11 @@ function Demo() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <Swatch bg="var(--control-accent)" label="--control-accent" light />
           <Swatch bg="var(--control-background)" label="--control-background" />
-          <Swatch bg="var(--tertiary-fill)" label="--tertiary-fill" />
-          <Swatch bg="var(--opaque-fill)" label="--opaque-fill" />
+          <Swatch bg="var(--system-fill)" label="--system-fill" />
+          <Swatch bg="var(--secondary-system-fill)" label="--secondary-system-fill" />
+          <Swatch bg="var(--tertiary-system-fill)" label="--tertiary-system-fill" />
+          <Swatch bg="var(--quaternary-system-fill)" label="--quaternary-system-fill" />
+          <Swatch bg="var(--quinary-system-fill)" label="--quinary-system-fill" />
           <Swatch bg="var(--separator)" label="--separator" />
         </div>
       </Section>
