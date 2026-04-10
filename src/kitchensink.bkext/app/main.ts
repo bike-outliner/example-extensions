@@ -1,7 +1,10 @@
 import { AppExtensionContext, Row, RowType, CommandContext, PanelHandle } from 'bike/app'
-import { PanelDemoProtocol } from '../dom/protocols'
+import { PanelDemoProtocol, ResourceDemoProtocol } from '../dom/protocols'
+
+let extensionContext: AppExtensionContext
 
 export async function activate(context: AppExtensionContext) {
+  extensionContext = context
   bike.observeWindows(async (window) => {
     await window.inspector.addItem({
       label: 'Details',
@@ -16,12 +19,13 @@ export async function activate(context: AppExtensionContext) {
   bike.commands.addCommands({
     commands: {
       'kitchensink:set-row-type': setRowTypeCommand,
-      'kitchensink:insert-color-api-demo': insertColorApiDemoCommand,
+      'kitchensink:insert-style-demo': insertStyleDemoCommand,
       'kitchensink:status-message-demo': statusMessageDemoCommand,
       'kitchensink:components-demo': componentsDemoCommand,
       'kitchensink:panel-inspector': panelInspectorCommand,
       'kitchensink:panel-utility': panelUtilityCommand,
       'kitchensink:panel-window': panelWindowCommand,
+      'kitchensink:resource-demo': resourceDemoCommand,
     },
   })
 }
@@ -118,16 +122,16 @@ function panelWindowCommand(): boolean {
   return true
 }
 
-function insertColorApiDemoCommand(context: CommandContext): boolean {
+function insertStyleDemoCommand(context: CommandContext): boolean {
   let editor = context.editor
   if (!editor) return false
 
   let outline = editor.outline
 
-  // Define demo rows showcasing the new color API
+  // Define demo rows styled by the Kitchen Sink editor style
   const demoRows = [
     {
-      text: 'Color API Demo',
+      text: 'Style Demo',
       type: 'heading' as RowType,
     },
     {
@@ -154,6 +158,10 @@ function insertColorApiDemoCommand(context: CommandContext): boolean {
       text: 'HSL Mixing (yellow + cyan → green)',
       attributes: { tags: 'hslmix' },
     },
+    {
+      text: 'Resource Image Background (bike.jpg)',
+      attributes: { tags: 'bikeimg' },
+    },
   ]
 
   outline.transaction({ animate: 'default' }, () => {
@@ -161,6 +169,19 @@ function insertColorApiDemoCommand(context: CommandContext): boolean {
     let insertLocation = editor.selection?.rows[0] ?? outline.root
     outline.insertRows(demoRows, insertLocation)
   })
+
+  return true
+}
+
+async function resourceDemoCommand(): Promise<boolean> {
+  const handle = await bike.showPanel<ResourceDemoProtocol>({
+    script: 'resource-demo.js',
+    title: 'Resource Demo',
+    role: 'utility',
+    width: 400,
+    height: 400,
+    id: 'kitchensink:resource-demo',
+  }, bike.frontmostWindow)
 
   return true
 }
