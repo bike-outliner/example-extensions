@@ -74,7 +74,7 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   // Demo 7: Resource image as row background
   // Rows tagged "bikeimg" get the bike.jpg resource as a background image
   row(`.@tags contains bikeimg`, (context, row) => {
-    let imageURL = extensionURL('resources/bike.jpg')
+    let imageURL = bike.extensionURL('resources/bike.jpg')
     let bikeImage = new Image(imageURL)
     row.text.decoration('background', (bg) => {
       bg.contents.image = bikeImage

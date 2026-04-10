@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { ResourceDemoProtocol } from './protocols'
 
 export function activate(context: DOMExtensionContext<ResourceDemoProtocol>) {
-  const logoURL = extensionURL('resources/logo.svg')
+  const logoURL = bike.extensionURL('resources/logo.svg')
   const root = createRoot(context.element)
   root.render(<ResourceDemo logoURL={logoURL} />)
 }
