@@ -27,7 +27,7 @@ describe("Archive Done Command", () => {
     })
 
     it("leaves undone tasks in place", () => {
-        let topLevelRows = outline.root.children.filter(r => r.id !== "archive")
+        let topLevelRows = outline.root.children.filter(r => r.persistentId !== "archive")
         assert.equal(topLevelRows.length, 1, "Expected 1 undone task remaining")
         assert.equal(topLevelRows[0].text.string, "Task 2")
     })

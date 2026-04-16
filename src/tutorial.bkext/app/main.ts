@@ -25,7 +25,7 @@ function archiveDoneCommand(context: CommandContext): boolean {
       archiveRow = outline.insertRows(
         [
           {
-            id: 'archive',
+            persistentId: 'archive',
             text: 'Archive',
           },
         ],

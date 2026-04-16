@@ -5,12 +5,12 @@
 import { DOMProtocol } from 'bike/core'
 
 export interface NodeData {
-  id: string
+  id: number
   name: string
   children?: NodeData[]
 }
 
 export interface D3Protocol extends DOMProtocol {
   toDOM: { type: 'load'; data: NodeData }
-  toApp: { type: 'select'; id: string }
+  toApp: { type: 'select'; id: number }
 }
