@@ -1,0 +1,10 @@
+{
+  "$schema": "../../node_modules/@bike-outliner/extension-kit/schemas/manifest.schema.json",
+  "description": "Demonstrates a settings UI with a checkbox bound to a user default, observed from the app context.",
+  "author": "Jesse Grosjean",
+  "url": "https://github.com/bike-outliner/example-extensions/tree/main/src/settings-example.bkext",
+  "version": "0.1.0",
+  "api_version": "0.0.0",
+  "permissions": [],
+  "host_permissions": []
+}
