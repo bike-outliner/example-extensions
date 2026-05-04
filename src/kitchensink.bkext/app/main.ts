@@ -47,21 +47,19 @@ async function setRowTypeCommand(context: CommandContext): Promise<boolean> {
   ]
 
   // Show choice box to select a row type
-  const indices = await bike.showChoiceBox(
-    rowTypes.map((t) => ({ name: t.name, symbol: t.symbol })),
-    {
-      placeholder: 'Set Row Type…',
-      allowsEmptySelection: false,
-      allowsMultipleSelection: false,
-    },
-  )
+  const result = await bike.showChoiceBox({
+    placeholder: 'Set Row Type…',
+    allowsEmptySelection: false,
+    allowsMultipleSelection: false,
+    items: rowTypes.map((t) => ({ name: t.name, symbol: t.symbol })),
+  })
 
-  if (indices === null || indices.length === 0) {
+  if (result === null || result.indices.length === 0) {
     return false
   }
 
   // Apply the selected type to all selected rows
-  const selectedType = rowTypes[indices[0]].type
+  const selectedType = rowTypes[result.indices[0]].type
   const selectedRows = editor.selection?.rows ?? []
 
   editor.outline.transaction({ animate: 'default' }, () => {
