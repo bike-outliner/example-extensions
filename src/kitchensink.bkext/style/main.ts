@@ -12,7 +12,7 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   row(`.@tags contains coral`, (context, row) => {
     let coral = Color.hsla(0.03, 0.9, 0.6, 1.0)
     row.text.decoration('background', (bg) => {
-      bg.color = coral.withAlpha(0.3)
+      bg.color = coral.alphaSet(0.3)
       bg.corners.radius = 4
     })
   })
@@ -22,7 +22,7 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   row(`.@tags contains perceptual`, (context, row) => {
     let softBlue = Color.oklch(0.7, 0.12, 0.7, 1.0)
     row.text.decoration('background', (bg) => {
-      bg.color = softBlue.withAlpha(0.4)
+      bg.color = softBlue.alphaSet(0.4)
       bg.corners.radius = 4
     })
   })
@@ -32,7 +32,7 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   row(`.@tags contains lab`, (context, row) => {
     let mutedPurple = Color.oklab(0.6, 0.1, -0.1, 1.0)
     row.text.decoration('background', (bg) => {
-      bg.color = mutedPurple.withAlpha(0.4)
+      bg.color = mutedPurple.alphaSet(0.4)
       bg.corners.radius = 4
     })
   })
@@ -41,9 +41,9 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   // Rows tagged "mixed" show red-to-blue mixing in OKLch (smoother hue transition)
   row(`.@tags contains mixed`, (context, row) => {
     // Mix red and blue at 50% using OKLch for perceptually smooth transition
-    let mixedColor = Color.systemRed().withFraction(0.5, Color.systemBlue(), 'oklch')
+    let mixedColor = Color.systemRed().mixed(Color.systemBlue(), 0.5, 'oklch')
     row.text.decoration('background', (bg) => {
-      bg.color = mixedColor.withAlpha(0.5)
+      bg.color = mixedColor.alphaSet(0.5)
       bg.corners.radius = 4
     })
   })
@@ -64,9 +64,9 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   // Demo 6: HSL mixing (hue interpolation via shortest path)
   row(`.@tags contains hslmix`, (context, row) => {
     // Mix yellow and cyan in HSL space - interpolates through green
-    let hslMixed = Color.systemYellow().withFraction(0.5, Color.systemCyan(), 'hsl')
+    let hslMixed = Color.systemYellow().mixed(Color.systemCyan(), 0.5, 'hsl')
     row.text.decoration('background', (bg) => {
-      bg.color = hslMixed.withAlpha(0.5)
+      bg.color = hslMixed.alphaSet(0.5)
       bg.corners.radius = 4
     })
   })

@@ -55,7 +55,7 @@ style.layer('selection', (row, run, caret, viewport, include) => {
   run(`.@view-selected-range`, (context, run) => {
     run.decoration('selection', (selection, layout) => {
       selection.zPosition = -1
-      selection.color = Color.textBackgroundSelected().withAlpha(0.5)
+      selection.color = Color.textBackgroundSelected().alphaSet(0.5)
     })
   })
 
