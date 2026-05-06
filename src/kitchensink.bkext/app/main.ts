@@ -26,8 +26,36 @@ export async function activate(context: AppExtensionContext) {
       'kitchensink:panel-utility': panelUtilityCommand,
       'kitchensink:panel-window': panelWindowCommand,
       'kitchensink:resource-demo': resourceDemoCommand,
+      'kitchensink:show-alert-demo': showAlertDemoCommand,
     },
   })
+}
+
+async function showAlertDemoCommand(context: CommandContext): Promise<boolean> {
+  const result = await bike.showAlert({
+    title: 'Show Alert Demo',
+    message: 'Demonstrates every AlertOptions feature: style, custom buttons, and all four field types.',
+    style: 'informational',
+    buttons: ['OK', 'Cancel'],
+    fields: [
+      { id: 'name', type: 'text', label: 'Name', placeholder: 'Your name' },
+      { id: 'password', type: 'secure', label: 'Password', placeholder: 'Secret' },
+      { id: 'subscribe', type: 'checkbox', label: 'Subscribe to updates', defaultValue: true },
+      {
+        id: 'flavor',
+        type: 'dropdown',
+        label: 'Favorite flavor',
+        dropdownOptions: ['Vanilla', 'Chocolate', 'Strawberry'],
+        defaultValue: 'Chocolate',
+      },
+    ],
+  })
+
+  if (result.button !== 'OK') return false
+
+  const summary = `name=${result.values['name']} subscribe=${result.values['subscribe']} flavor=${result.values['flavor']}`
+  context.editor?.showStatusMessage(summary, 4000)
+  return true
 }
 
 async function setRowTypeCommand(context: CommandContext): Promise<boolean> {
