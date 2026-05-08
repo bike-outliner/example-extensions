@@ -114,40 +114,52 @@
     "customHighlight": "color-mix(in oklch, $customPrimary 70%, white)"
   },
   "materials": {
-    "window": "white",
+    "window": {
+      "fill": "white"
+    },
     "titlebar": {
-      "type": "system",
-      "style": "titlebar",
-      "opacity": 0.9,
-      "followsActive": true
+      "fill": {
+        "type": "system",
+        "style": "titlebar",
+        "opacity": 0.9,
+        "followsActive": true
+      }
     },
     "sidebar": {
-      "type": "glass",
-      "style": "regular",
-      "tintColor": "$customPrimary"
+      "fill": {
+        "type": "glass",
+        "style": "regular",
+        "tintColor": "$customPrimary"
+      }
     },
     "editor": {
-      "type": "linear",
-      "angle": 180,
-      "stops": [
-        { "color": "white", "position": 0 },
-        { "color": "$customHighlight", "position": 1 }
-      ]
+      "fill": {
+        "type": "linear",
+        "angle": 180,
+        "stops": [
+          { "color": "white", "position": 0 },
+          { "color": "$customHighlight", "position": 1 }
+        ]
+      }
     },
-    "editorBars": {
-      "type": "radial",
-      "centerX": 0.5,
-      "centerY": 0.5,
-      "stops": [
-        { "color": "white", "position": 0 },
-        { "color": "$customPrimary", "position": 0.5 },
-        { "color": "$customSecondary", "position": 1 }
-      ]
+    "editorToolbar": {
+      "fill": {
+        "type": "radial",
+        "centerX": 0.5,
+        "centerY": 0.5,
+        "stops": [
+          { "color": "white", "position": 0 },
+          { "color": "$customPrimary", "position": 0.5 },
+          { "color": "$customSecondary", "position": 1 }
+        ]
+      }
     },
     "inspector": {
-      "type": "glass",
-      "style": "clear",
-      "tintColor": "$oklchColor"
+      "fill": {
+        "type": "glass",
+        "style": "clear",
+        "tintColor": "$oklchColor"
+      }
     }
   },
   "rows": {
