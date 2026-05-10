@@ -121,12 +121,14 @@ function componentsDemoCommand(context: CommandContext): boolean {
 }
 
 async function showPanelWithRole(role: 'inspector' | 'utility' | 'window'): Promise<boolean> {
+  const v = bike.mainScreen.visibleFrame
+  const width = 580
+  const height = 400
   let handle: PanelHandle<PanelDemoProtocol> = await bike.showPanel<PanelDemoProtocol>({
     script: 'panel-demo.js',
     title: `Panel (${role})`,
     role,
-    width: 580,
-    height: 400,
+    frame: { x: v.x + (v.width - width) / 2, y: v.y + (v.height - height) / 2, width, height },
     id: `panel-demo-${role}`,
   }, bike.frontmostWindow)
   handle.postMessage({ type: 'role', role })
@@ -200,12 +202,14 @@ function insertStyleDemoCommand(context: CommandContext): boolean {
 }
 
 async function resourceDemoCommand(): Promise<boolean> {
+  const v = bike.mainScreen.visibleFrame
+  const width = 400
+  const height = 400
   const handle = await bike.showPanel<ResourceDemoProtocol>({
     script: 'resource-demo.js',
     title: 'Resource Demo',
     role: 'utility',
-    width: 400,
-    height: 400,
+    frame: { x: v.x + (v.width - width) / 2, y: v.y + (v.height - height) / 2, width, height },
     id: 'kitchensink:resource-demo',
   }, bike.frontmostWindow)
 
