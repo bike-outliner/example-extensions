@@ -1,5 +1,5 @@
 import { DOMExtensionContext } from 'bike/dom'
-import { SFSymbol, Button, Label, FormRow, SegmentedControl } from 'bike/components'
+import { Box, SFSymbol, Button, Label, FormRow, SegmentedControl } from 'bike/components'
 import { createRoot } from 'react-dom/client'
 import { useState } from 'react'
 
@@ -137,6 +137,30 @@ function Demo() {
         <FormRow label="Notes">
           <Label color="secondary">Optional metadata</Label>
         </FormRow>
+      </Section>
+
+      {/* Box */}
+      <Section title="Box">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Box label="Titled group">
+            <FormRow label="Name">
+              <input type="text" placeholder="Enter name" style={inputStyle} />
+            </FormRow>
+            <FormRow label="Type">
+              <SegmentedControl
+                size="small"
+                items={[
+                  { value: 'body', label: 'Body' },
+                  { value: 'heading', label: 'Heading' },
+                ]}
+                value="body"
+              />
+            </FormRow>
+          </Box>
+          <Box>
+            <Label color="secondary">A plain box with no label — just grouped content.</Label>
+          </Box>
+        </div>
       </Section>
 
       {/* System Fonts */}
