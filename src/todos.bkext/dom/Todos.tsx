@@ -62,10 +62,7 @@ const Todos: React.FC = () => {
 
   const checkOff = (todo: Todo) => {
     setCheckedIds((prev) => new Set(prev).add(todo.id))
-    bike.session.updateRows({
-      rows: [todo.id],
-      attributes: { done: new Date().toISOString() },
-    })
+    bike.session.performCommands({ ids: ['row:toggle-done'], rows: [todo.id] })
   }
 
   return (
