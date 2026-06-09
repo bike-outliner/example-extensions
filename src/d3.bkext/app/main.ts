@@ -1,58 +1,31 @@
-import { AppExtensionContext, DOMScript, DOMScriptHandle, Row, CommandContext } from 'bike/app'
-import { NodeData, D3Protocol } from '../dom/protocols'
+import { AppExtensionContext, DOMScript } from 'bike/app'
 
 export async function activate(context: AppExtensionContext) {
   bike.commands.addCommands({
     commands: {
-      'd3:show-tree-view': (context: CommandContext) => {
-        showD3Sheet('tree-view.js')
-        return true
+      'd3:show-tree-view': {
+        button: { symbol: 'tree', location: 'titlebar' },
+        action: () => {
+          showD3Panel('tree-view.js', 'D3 Tree View', 'd3:tree-view')
+          return true
+        },
       },
-      'd3:show-radial-view': (context: CommandContext) => {
-        showD3Sheet('radial-view.js')
-        return true
+      'd3:show-radial-view': {
+        button: { symbol: 'circle.hexagongrid', location: 'titlebar' },
+        action: () => {
+          showD3Panel('radial-view.js', 'D3 Radial View', 'd3:radial-view')
+          return true
+        },
       },
     },
   })
 }
 
-async function showD3Sheet(domScriptName: DOMScript) {
-  let window = bike.frontmostWindow
-  if (window) {
-    let handle = await window.presentSheet<D3Protocol>(domScriptName)
-    let editor = window.currentOutlineEditor
-    if (editor) {
-      handle.postMessage({
-        type: 'load',
-        data: buildD3Hierarchy(editor.focus),
-      })
-    }
-    handle.onmessage = (message) => {
-      let editor = window.currentOutlineEditor
-      if (editor && message.type === 'select') {
-        let row = editor.outline.getRowById(message.id)
-        if (row) {
-          editor.selectRows(row)
-        }
-      }
-      handle.dispose()
-    }
-  }
-}
-
-function buildD3Hierarchy(row: Row): NodeData {
-  return {
-    id: row.id,
-    name: trimString(row.text.string, 32),
-    children: row.children
-      .filter((child) => child.firstChild || child.text.string.length > 0)
-      .map(buildD3Hierarchy),
-  }
-}
-
-function trimString(string: string, maxLength: number): string {
-  if (string.length <= maxLength) {
-    return string
-  }
-  return string.slice(0, maxLength - 1) + '…'
+// The panel's DOM script streams the focused subtree itself via `bike.session`
+// (which resolves `@focused` / the outline against this panel's host window) and
+// selects rows directly, so the app side only has to open the panel.
+async function showD3Panel(script: DOMScript, title: string, id: string) {
+  const window = bike.frontmostWindow
+  if (!window) return
+  await bike.showPanel({ script, title, id }, window)
 }

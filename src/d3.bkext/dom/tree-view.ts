@@ -1,16 +1,16 @@
 import * as d3 from 'd3'
-import { NodeData, activateD3View, D3Protocol } from './d3-common'
+import { activateD3View } from './d3-common'
 import { DOMExtensionContext } from 'bike/dom'
 
-export async function activate(context: DOMExtensionContext<D3Protocol>) {
+export async function activate(context: DOMExtensionContext) {
   activateD3View(context, {
     createLayout(root, width) {
       const dx = 14
       const dy = width / (root.height + 1)
-      return d3.tree<NodeData>().nodeSize([dx, dy])(root)
+      return d3.tree<SessionRow>().nodeSize([dx, dy])(root)
     },
 
-    createSvg(layoutRoot, width) {
+    configureSvg(svg, layoutRoot, width) {
       const dx = 14
       let x0 = Infinity
       let x1 = -Infinity
@@ -21,8 +21,7 @@ export async function activate(context: DOMExtensionContext<D3Protocol>) {
       const height = x1 - x0 + dx * 2
       const dy = width / (layoutRoot.height + 1)
 
-      return d3
-        .create('svg')
+      svg
         .attr('width', width)
         .attr('height', height)
         .attr('viewBox', [-dy / 3, x0 - dx, width, height])
@@ -32,7 +31,7 @@ export async function activate(context: DOMExtensionContext<D3Protocol>) {
     createLink() {
       return (d) => {
         const gen = d3
-          .linkHorizontal<d3.HierarchyPointLink<NodeData>, d3.HierarchyPointNode<NodeData>>()
+          .linkHorizontal<d3.HierarchyPointLink<SessionRow>, d3.HierarchyPointNode<SessionRow>>()
           .x((d) => d.y)
           .y((d) => d.x)
         return gen(d)
