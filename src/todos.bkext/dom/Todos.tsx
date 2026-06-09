@@ -35,7 +35,7 @@ const Todos: React.FC = () => {
     let sub: SessionSubscription | undefined
     let canceled = false
     bike.session
-      .observeOutline(
+      .observeOutlineQuery(
         { path: '//task not @done', shape: 'flat' },
         (snapshot) => {
           const next = collectTodos(snapshot)
