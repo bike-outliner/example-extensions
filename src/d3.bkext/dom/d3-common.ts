@@ -36,6 +36,7 @@ type PointLink = d3.HierarchyPointLink<SessionRow>
 const MAX_LABEL = 32
 const DURATION = 400
 const SELECTED = 'var(--control-accent, AccentColor)' // accent for the editor's selected rows
+const LABEL = 'var(--label)' // system text color for unselected labels
 
 const trim = (s: string, max: number) => (s.length <= max ? s : s.slice(0, max - 1) + '…')
 
@@ -125,7 +126,7 @@ export function activateD3View(context: DOMExtensionContext, config: D3ViewConfi
       .style('fill', (d) => (sel.has(d.data.id) ? SELECTED : d.children ? '#555' : '#999'))
     nodes
       .select<SVGTextElement>('text.label')
-      .style('fill', (d) => (sel.has(d.data.id) ? SELECTED : null))
+      .style('fill', (d) => (sel.has(d.data.id) ? SELECTED : LABEL))
   }
 
   const render = () => {
@@ -200,11 +201,6 @@ export function activateD3View(context: DOMExtensionContext, config: D3ViewConfi
       .attr('class', 'label')
       .attr('dy', '0.31em')
       .style('cursor', 'default')
-      // Single-element halo: stroke is painted behind the fill, so we don't need
-      // a cloned text node that would have to be kept joined too.
-      .attr('stroke', 'white')
-      .attr('stroke-width', 3)
-      .attr('paint-order', 'stroke')
       .on('mouseover', function () {
         d3.select(this).style('text-decoration', 'underline')
       })
