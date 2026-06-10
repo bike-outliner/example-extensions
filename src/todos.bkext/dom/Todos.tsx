@@ -27,11 +27,6 @@ const Todos: React.FC = () => {
   const [closed, setClosed] = useState(false)
 
   useEffect(() => {
-    // Stream just the unchecked tasks — the path query filters natively, so
-    // snapshots stay small no matter how large the outline is. Inspector
-    // items are bound to their window, so omitting `outline` pins this
-    // subscription to the host window's outline — it doesn't retarget when
-    // another window becomes frontmost.
     let sub: SessionSubscription | undefined
     let canceled = false
     bike.session
