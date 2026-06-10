@@ -203,7 +203,7 @@ export function activateD3View(context: DOMExtensionContext, config: D3ViewConfi
     }
   }
 
-  bike.session.observeEditor({ debounce: 250, outline: true }, (ed, outline, changes) => {
+  bike.session.observeOutlineEditor({ debounce: 250 }, (outline, ed, changes) => {
     editor = ed
     outlineRoot = outline?.root ?? null
     if (!outlineRoot) return
