@@ -25,6 +25,7 @@ const Todos: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([])
   const [checkedIds, setCheckedIds] = useState<Set<SessionId>>(new Set())
   const [closed, setClosed] = useState(false)
+  const [expanded, setExpanded] = useState(true)
 
   useEffect(() => {
     let sub: SessionSubscription | undefined
@@ -57,16 +58,17 @@ const Todos: React.FC = () => {
 
   const checkOff = (todo: Todo) => {
     setCheckedIds((prev) => new Set(prev).add(todo.id))
-    bike.session.performCommands({ ids: ['row:toggle-done'], rows: [todo.id] })
+    bike.session.evaluateCommands({ ids: ['row:toggle-done'], rows: [todo.id] })
   }
 
   return (
     <Disclosure
       label="Todos"
       accessory={<Label color="secondary">{todos.length}</Label>}
-      defaultExpanded
+      expanded={expanded}
+      onChange={setExpanded}
     >
-      {todos.length === 0 ? (
+      {!expanded ? null : todos.length === 0 ? (
         <Label color="secondary">{closed ? 'Outline closed' : 'No unchecked tasks'}</Label>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25em' }}>
