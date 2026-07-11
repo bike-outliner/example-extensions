@@ -1,0 +1,10 @@
+{
+  "$schema": "../../node_modules/@bike-outliner/extension-kit/schemas/manifest.schema.json",
+  "description": "Badge card demo: every badge item kind (radio, toggle, date, color, field, action, command) on one @task badge",
+  "author": "Jesse Grosjean",
+  "url": "https://github.com/bike-outliner/example-extensions/tree/main/src/badge-demo.bkext",
+  "version": "0.1.0",
+  "api_version": "0.0.0",
+  "permissions": [],
+  "host_permissions": []
+}
