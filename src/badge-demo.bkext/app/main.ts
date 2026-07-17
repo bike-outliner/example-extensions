@@ -1,80 +1,92 @@
-import { Image, SymbolConfiguration } from 'bike/app'
+import { Image, MenuItem, SymbolConfiguration } from 'bike/app'
 
-// Badge card demo: one value-aware badge exercising every card item kind.
-// Add a `task` attribute to any row and click the checklist badge.
+// Menu demo: one badge whose onClick presents a menu exercising every item
+// type (the menu vocabulary in `bike/app`'s menu.d.ts). Add a `task`
+// attribute to any row and click the checklist badge.
 //
-// All valued kinds (toggle, date, color, radio, field) commit through the
-// single `onChange(id, value, ctx)` — the item id is the attribute name, so
-// the handler is one line. Triggered kinds route through `onAction`.
+// The badge itself is decoration only — `render` returns the glyph. The
+// menu is built imperatively in `onClick` by reading the row, and its
+// handlers are per-presentation: all valued types (toggle, calendar,
+// palette, choice, field, duration) commit through the single
+// `onChange(id, value, ctx)` with TYPED values — the item id is the
+// attribute name, so the handler is one line. Buttons route through
+// `onAction` (or dispatch a command via the `command:<id>` id convention).
 
 bike.badge('task', {
   where: '.@task',
-  inputs: {
-    task: '@task',
-    flagged: '@flagged',
-    due: '@due',
-    estimate: '@estimate',
-    color: '@color',
-    status: '@status',
-  },
-  render: (values, env) => ({
-    image: Image.fromSymbol(
+  render: (values, env) =>
+    Image.fromSymbol(
       new SymbolConfiguration('checklist').withHierarchicalColor(env.color.alphaSet(0.6)).withFont(env.font)
     ),
-    items: [
-      { kind: 'header', title: 'Task' },
-      // Checkbox: flips in place, card stays open.
-      { kind: 'toggle', id: 'flagged', title: 'Flagged', value: values['flagged'] === 'true' },
-      // Date picker: commits ISO per change. Default is the compact text
-      // field with a calendar popover; `display: 'calendar'` shows the
-      // inline graphical month view instead.
-      { kind: 'date', id: 'due', label: 'Due', value: values['due'] },
-      // Duration picker: hr/min/sec digit fields, commits whole seconds.
-      { kind: 'duration', id: 'estimate', label: 'Estimate', value: values['estimate'] },
-      // Swatch strip (choose = commit + dismiss) + custom color well.
+  onClick: ({ editor, row }) => {
+    const attr = (name: string) => row.getAttribute(name) ?? undefined
+    const items: MenuItem[] = [
+      /*
+      // Checkbox: commits a BOOLEAN and closes the menu.
+      { type: 'toggle', id: 'flagged', title: 'Flagged', value: attr('flagged') === 'true' },
+      // Inline month calendar: picking a day commits ISO `YYYY-MM-DD` and
+      // closes the menu.
+      { type: 'calendar', id: 'due', label: 'Due', value: attr('due') },
+      // Duration picker: digit fields, commits whole seconds as a NUMBER;
+      // menu stays open.
+      { type: 'duration', id: 'estimate', label: 'Estimate', value: Number(attr('estimate')) || 0 },
+      // Palette: tinted-symbol strip (this is where color swatches map);
+      // choosing commits the option's value and closes the menu.
       {
-        kind: 'color',
+        type: 'palette',
         id: 'color',
-        label: 'Color',
-        swatches: ['#e5484d', '#f5a623', '#46a758', '#0091ff', '#8e4ec6'],
-        value: values['color'],
+        title: 'Color',
+        options: ['#e5484d', '#f5a623', '#46a758', '#0091ff', '#8e4ec6'].map((c) => ({
+          value: c,
+          title: c,
+          color: c,
+        })),
+        value: attr('color'),
       },
-      { kind: 'separator' },
-      // Radio group: exclusive choice, choose = commit + dismiss.
+      { type: 'separator' },
+      // Choice group: exclusive checkmark rows, choose = commit + dismiss.
       {
-        kind: 'radio',
+        type: 'choice',
         id: 'status',
         options: [
-          { value: 'todo', label: 'Todo' },
-          { value: 'doing', label: 'Doing' },
-          { value: 'done', label: 'Done' },
+          { value: 'todo', title: 'Todo' },
+          { value: 'doing', title: 'Doing' },
+          { value: 'done', title: 'Done' },
         ],
-        value: values['status'],
+        value: attr('status'),
       },
-      { kind: 'separator' },
-      // Free-text field: commits on end of editing / Return.
-      { kind: 'field', id: 'task', label: 'Task', value: values['task'] ?? '', placeholder: 'name' },
-      { kind: 'separator' },
-      // Action item → onAction; command item dispatches the registered
-      // command with this row as its selection.
-      { kind: 'action', id: 'clear', title: 'Clear Task', destructive: true },
-      // Command items must name a REGISTERED command (see
-      // `bike.commands.toString()`) — unregistered ones are hidden from the
-      // card. The clicked row becomes the command's selection.
-      { kind: 'command', command: 'edit:copy-row-link' },
-    ],
-  }),
-  onAction: (id, { row }) => {
-    if (id !== 'clear') return
-    row.outline.transaction({ label: 'Clear Task' }, () => {
-      for (const name of ['task', 'status', 'due', 'estimate', 'color', 'flagged']) {
-        row.removeAttribute(name)
-      }
-    })
-  },
-  onChange: (id, value, { row }) => {
-    row.outline.transaction({ label: 'Edit Task' }, () => {
-      row.setAttribute(id, value)
+      { type: 'separator' },
+      // Free-text field: commits on Return / end of editing / menu close.
+      { type: 'field', id: 'task', label: 'Task', value: attr('task') ?? '', placeholder: 'name' },
+      { type: 'separator' },
+      */
+      // Buttons route to onAction — except `command:<id>` ids, which
+      // dispatch the registered command with this row as its selection
+      // (unregistered commands are hidden from the menu; see
+      // `bike.commands.toString()`). To filter, use an onAction button
+      // that sets `editor.filter`.
+      { type: 'button', id: 'command:edit:copy-row-link', title: 'Copy Row Link' },
+      { type: 'button', id: 'clear', title: 'Clear Task', destructive: true },
+    ]
+
+    editor.showMenu(row, {
+      items,
+      // Anchor at this badge's glyph (falls back to the row's text line).
+      anchor: 'task',
+      onAction: (id, { row }) => {
+        if (id !== 'clear') return
+        row.outline.transaction({ label: 'Clear Task' }, () => {
+          for (const name of ['task', 'status', 'due', 'estimate', 'color', 'flagged']) {
+            row.removeAttribute(name)
+          }
+        })
+      },
+      onChange: (id, value, { row }) => {
+        // Values are TYPED (string/number/boolean); attributes store strings.
+        row.outline.transaction({ label: 'Edit Task' }, () => {
+          row.setAttribute(id, String(value))
+        })
+      },
     })
   },
 })
