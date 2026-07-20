@@ -70,7 +70,7 @@ bike.badge('task', {
     ]
 
     editor.showMenu(row, {
-      items,
+      items: () => items,
       // Anchor at this badge's glyph (falls back to the row's text line).
       anchor: 'task',
       onAction: (id, { row }) => {
