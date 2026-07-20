@@ -1,0 +1,10 @@
+{
+  "$schema": "../../node_modules/@bike-outliner/extension-kit/schemas/manifest.schema.json",
+  "description": "Mark a branch as versioned, save named snapshots, and switch between versions",
+  "author": "Jesse Grosjean",
+  "url": "https://github.com/bike-outliner/core-extensions/tree/main/src/versioning.bkext",
+  "version": "0.1.0",
+  "api_version": "0.0.0",
+  "permissions": [],
+  "host_permissions": []
+}

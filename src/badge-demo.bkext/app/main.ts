@@ -6,11 +6,11 @@ import { Image, MenuItem, SymbolConfiguration } from 'bike/app'
 //
 // The badge itself is decoration only — `render` returns the glyph. The
 // menu is built imperatively in `onClick` by reading the row, and its
-// handlers are per-presentation: all valued types (toggle, calendar,
-// palette, choice, field, duration) commit through the single
-// `onChange(id, value, ctx)` with TYPED values — the item id is the
-// attribute name, so the handler is one line. Buttons route through
-// `onAction` (or dispatch a command via the `command:<id>` id convention).
+// handler is per-presentation: everything reports through the single
+// `onAction(id, value, ctx)` — buttons with an undefined value (or
+// dispatching a command via the `command:<id>` id convention), valued
+// items (calendar, palette) with their committed value. Checkbox/radio
+// semantics come from buttons with `state: 'on'`.
 
 bike.badge('task', {
   where: '.@task',
@@ -22,8 +22,8 @@ bike.badge('task', {
     const attr = (name: string) => row.getAttribute(name) ?? undefined
     const items: MenuItem[] = [
       /*
-      // Checkbox: commits a BOOLEAN and closes the menu.
-      { type: 'toggle', id: 'flagged', title: 'Flagged', value: attr('flagged') === 'true' },
+      // Checkbox: a button with state — flip the attribute in onAction.
+      { type: 'button', id: 'flagged', title: 'Flagged', state: attr('flagged') === 'true' ? 'on' : 'off' },
       // Inline month calendar: picking a day commits ISO `YYYY-MM-DD` and
       // closes the menu.
       { type: 'calendar', id: 'due', label: 'Due', value: attr('due') },
@@ -44,17 +44,13 @@ bike.badge('task', {
         value: attr('color'),
       },
       { type: 'separator' },
-      // Choice group: exclusive checkmark rows, choose = commit + dismiss.
-      {
-        type: 'choice',
-        id: 'status',
-        options: [
-          { value: 'todo', title: 'Todo' },
-          { value: 'doing', title: 'Doing' },
-          { value: 'done', title: 'Done' },
-        ],
-        value: attr('status'),
-      },
+      // Radio group: checked buttons, exclusivity handled in onAction.
+      ...['todo', 'doing', 'done'].map((status) => ({
+        type: 'button',
+        id: `status:${status}`,
+        title: status[0].toUpperCase() + status.slice(1),
+        state: attr('status') === status ? 'on' : 'off',
+      })),
       { type: 'separator' },
       // Free-text field: commits on Return / end of editing / menu close.
       { type: 'field', id: 'task', label: 'Task', value: attr('task') ?? '', placeholder: 'name' },
@@ -66,25 +62,28 @@ bike.badge('task', {
       // `bike.commands.toString()`). To filter, use an onAction button
       // that sets `editor.filter`.
       { type: 'button', id: 'command:edit:copy-row-link', title: 'Copy Row Link' },
-      { type: 'button', id: 'clear', title: 'Clear Task', destructive: true },
+      { type: 'button', id: 'clear', title: 'Clear Task' },
     ]
 
     editor.showMenu(row, {
       items: () => items,
       // Anchor at this badge's glyph (falls back to the row's text line).
       anchor: 'task',
-      onAction: (id, { row }) => {
+      onAction: (id, value, { row }) => {
+        // One merged handler: buttons arrive with an undefined value, valued
+        // items (calendar/palette) with their committed value — the item id
+        // is the attribute name, so the valued branch is one line.
+        if (value !== undefined) {
+          row.outline.transaction({ label: 'Edit Task' }, () => {
+            row.setAttribute(id, String(value))
+          })
+          return
+        }
         if (id !== 'clear') return
         row.outline.transaction({ label: 'Clear Task' }, () => {
           for (const name of ['task', 'status', 'due', 'estimate', 'color', 'flagged']) {
             row.removeAttribute(name)
           }
-        })
-      },
-      onChange: (id, value, { row }) => {
-        // Values are TYPED (string/number/boolean); attributes store strings.
-        row.outline.transaction({ label: 'Edit Task' }, () => {
-          row.setAttribute(id, String(value))
         })
       },
     })

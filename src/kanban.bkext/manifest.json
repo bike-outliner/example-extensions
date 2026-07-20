@@ -1,0 +1,9 @@
+{
+  "$schema": "../../node_modules/@bike-outliner/extension-kit/schemas/manifest.schema.json",
+  "description": "View your outline as a kanban board",
+  "author": "Jesse Grosjean",
+  "version": "0.1.0",
+  "api_version": "0.0.0",
+  "permissions": [],
+  "host_permissions": []
+}
