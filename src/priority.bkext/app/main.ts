@@ -25,7 +25,7 @@ export async function activate(context: AppExtensionContext) {
     title: 'Priority',
     sigil: '!',
     // This extension presents priority itself (the P badge below) — opt out
-    // of the built-in catch-all chip.
+    // of the built-in catch-all badge.
     defaultBadge: false,
     shortcuts: () => [1, 2, 3].map((n) => ({ name: `Priority ${n}`, value: String(n) })),
     standardValues: [1, 2, 3].map((n) => ({ name: String(n), value: String(n) })),
