@@ -3,7 +3,8 @@ describe("OutlineEditor filter reentrancy", () => {
 
     it("can set and clear filter without reentrancy crash", () => {
         editor.filter = "//heading"
-        assert.equal(editor.filter, "//heading")
-        editor.filter = undefined as any
+        // The getter returns the filter struct (a bare-path set has no label).
+        assert.equal(editor.filter?.path, "//heading")
+        editor.filter = undefined
     })
 })

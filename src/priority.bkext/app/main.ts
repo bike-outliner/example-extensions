@@ -17,6 +17,25 @@ export async function activate(context: AppExtensionContext) {
     },
   })
 
+  // Teach attribute completion about `priority`: quick effects under the
+  // bare `@` popup, 1/2/3 value suggestions after `@priority:` (and behind
+  // the `!` sigil — `!2⏎` sets priority 2), and a parse that accepts only
+  // 1–3 (the sigil is resolve-or-drop, so `!cool` in prose stays silent).
+  bike.attribute('priority', {
+    title: 'Priority',
+    sigil: '!',
+    // This extension presents priority itself (the P badge below) — opt out
+    // of the built-in catch-all chip.
+    defaultBadge: false,
+    shortcuts: () => [1, 2, 3].map((n) => ({ name: `Priority ${n}`, value: String(n) })),
+    standardValues: [1, 2, 3].map((n) => ({ name: String(n), value: String(n) })),
+    parse: (text) => {
+      const n = parseInt(text, 10)
+      if (!Number.isFinite(n) || String(n) !== text.trim() || n < 1 || n > 3) return undefined
+      return { value: String(n), label: `Priority ${n}` }
+    },
+  })
+
   // `where` selects rows with a `priority` attribute; `inputs` defaults to
   // ['priority'], so render reads values.priority (the memo key).
   bike.badge('priority', {
