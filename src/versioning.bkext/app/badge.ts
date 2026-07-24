@@ -57,9 +57,9 @@ function showVersionsMenu(editor: OutlineEditor, row: Row) {
   ]
 
   editor.showMenu(row, {
-    items: () => items,
+    items,
     anchor: 'versioning',
-    onAction: (id, _value, { editor, row }) => {
+    onAction: (id, { editor, row }) => {
       if (id.startsWith('switch:')) {
         const versionId = id.slice('switch:'.length)
         if (versionId !== row.getAttribute('version')) switchVersion(editor, row, versionId)

@@ -17,13 +17,11 @@ export async function activate(context: AppExtensionContext) {
     },
   })
 
-  // Teach attribute completion about `priority`: quick effects under the
-  // bare `@` popup, 1/2/3 value suggestions after `@priority:` (and behind
-  // the `!` sigil — `!2⏎` sets priority 2), and a parse that accepts only
-  // 1–3 (the sigil is resolve-or-drop, so `!cool` in prose stays silent).
+  // Teach the attribute palette about `priority`: quick effects in the
+  // names stage, 1/2/3 value suggestions in the value stage, and a parse
+  // that accepts only 1–3.
   bike.attribute('priority', {
     title: 'Priority',
-    sigil: '!',
     // This extension presents priority itself (the P badge below) — opt out
     // of the built-in catch-all badge.
     defaultBadge: false,
@@ -58,26 +56,24 @@ export async function activate(context: AppExtensionContext) {
       // Radio group from checked command buttons: the active priority carries
       // the checkmark, picking one dispatches its command and closes the
       // menu. "Show Priority" at the top filters to prioritized rows.
+      const value = row.getAttribute('priority') ?? ''
       editor.showMenu(row, {
-        items: () => {
-          const value = row.getAttribute('priority') ?? ''
-          return [
-            { type: 'button', id: 'filter', title: 'Show Priority', symbol: 'line.3.horizontal.decrease' },
-            { type: 'separator' },
-            ...([1, 2, 3] as const).map(
-              (n): MenuItem => ({
-                type: 'button',
-                id: `command:priority:${n}`,
-                title: `Priority ${n}`,
-                state: value === String(n) ? 'on' : 'off',
-              })
-            ),
-            { type: 'separator' },
-            { type: 'button', id: 'command:priority:clear', title: 'Clear Priority' },
-          ]
-        },
+        items: [
+          { type: 'button', id: 'filter', title: 'Show Priority', symbol: 'line.3.horizontal.decrease' },
+          { type: 'separator' },
+          ...([1, 2, 3] as const).map(
+            (n): MenuItem => ({
+              type: 'button',
+              id: `command:priority:${n}`,
+              title: `Priority ${n}`,
+              state: value === String(n) ? 'on' : 'off',
+            })
+          ),
+          { type: 'separator' },
+          { type: 'button', id: 'command:priority:clear', title: 'Clear Priority' },
+        ],
         anchor: 'priority',
-        onAction: (id, _value, { editor }) => {
+        onAction: (id, { editor }) => {
           if (id !== 'filter') return
           editor.filter = { path: `//@priority`, label: `Show Priority` }
         },
