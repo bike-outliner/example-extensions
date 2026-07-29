@@ -10,3 +10,6 @@ export interface PanelDemoProtocol extends DOMProtocol {
 
 export interface ResourceDemoProtocol extends DOMProtocol {
 }
+
+export interface SessionDropDemoProtocol extends DOMProtocol {
+}

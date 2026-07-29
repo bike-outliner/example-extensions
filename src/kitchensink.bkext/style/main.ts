@@ -10,7 +10,7 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   // Demo 1: HSL color constructor
   // Rows tagged "coral" get a warm coral background using HSL
   row(`.@tags contains coral`, (context, row) => {
-    let coral = Color.hsla(0.03, 0.9, 0.6, 1.0)
+    let coral = Color.hsla(11, 0.9, 0.6, 1.0)
     row.text.decoration('background', (bg) => {
       bg.color = coral.alphaSet(0.3)
       bg.corners.radius = 4
@@ -20,7 +20,7 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   // Demo 2: OKLch color constructor
   // Rows tagged "perceptual" get a perceptually uniform blue using OKLch
   row(`.@tags contains perceptual`, (context, row) => {
-    let softBlue = Color.oklch(0.7, 0.12, 0.7, 1.0)
+    let softBlue = Color.oklch(0.7, 0.12, 252, 1.0)
     row.text.decoration('background', (bg) => {
       bg.color = softBlue.alphaSet(0.4)
       bg.corners.radius = 4
@@ -51,7 +51,7 @@ style.layer('color-api-demo', (row, run, caret, viewport, include) => {
   // Demo 5: Contrast selection for accessibility
   // Rows tagged "contrast" automatically pick black or white text for readability
   row(`.@tags contains contrast`, (context, row) => {
-    let darkBackground = Color.oklch(0.3, 0.15, 0.8, 1.0)
+    let darkBackground = Color.oklch(0.3, 0.15, 288, 1.0)
     // Automatically select contrasting text color meeting WCAG AA
     let textColor = darkBackground.contrasted([Color.black(), Color.white()], 'aa')
     row.text.color = textColor

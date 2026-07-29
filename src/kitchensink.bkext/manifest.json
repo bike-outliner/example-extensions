@@ -4,7 +4,7 @@
   "author": "Jesse Grosjean",
   "url": "https://github.com/bike-outliner/example-extensions/tree/main/src/kitchensink.bkext",
   "version": "0.1.0",
-  "api_version": "0.0.0",
-  "permissions": [],
+  "api_version": "0.63.0",
+  "permissions": ["keychain"],
   "host_permissions": []
 }

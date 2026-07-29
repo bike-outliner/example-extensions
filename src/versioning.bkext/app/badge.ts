@@ -56,10 +56,9 @@ function showVersionsMenu(editor: OutlineEditor, row: Row) {
     { type: 'button', id: 'command:versioning:toggle', title: 'Turn Off Versioning' },
   ]
 
-  editor.showMenu(row, {
+  editor.showMenu({ row, anchor: 'versioning' }, {
     items,
-    anchor: 'versioning',
-    onAction: (id, { editor, row }) => {
+    onAction: (id) => {
       if (id.startsWith('switch:')) {
         const versionId = id.slice('switch:'.length)
         if (versionId !== row.getAttribute('version')) switchVersion(editor, row, versionId)

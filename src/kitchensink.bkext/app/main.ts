@@ -1,5 +1,6 @@
 import { AppExtensionContext, Row, RowType, CommandContext, PanelHandle } from 'bike/app'
 import { PanelDemoProtocol, ResourceDemoProtocol } from '../dom/protocols'
+import { registerApiExamples } from './api-examples'
 
 let extensionContext: AppExtensionContext
 
@@ -29,6 +30,9 @@ export async function activate(context: AppExtensionContext) {
       'kitchensink:show-alert-demo': showAlertDemoCommand,
     },
   })
+
+  // Demos that used to live as @example blocks in the API docs.
+  registerApiExamples()
 }
 
 async function showAlertDemoCommand(context: CommandContext): Promise<boolean> {

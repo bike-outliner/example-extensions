@@ -13,6 +13,7 @@ import { Image, MenuItem, SymbolConfiguration } from 'bike/app'
 
 bike.badge('task', {
   where: '.@task',
+  inputs: { task: '@task' },
   render: (values, env) =>
     Image.fromSymbol(
       new SymbolConfiguration('checklist').withHierarchicalColor(env.color.alphaSet(0.6)).withFont(env.font)
@@ -39,11 +40,9 @@ bike.badge('task', {
       { type: 'button', id: 'clear', title: 'Clear Task' },
     ]
 
-    editor.showMenu(row, {
+    editor.showMenu({ row, anchor: 'task' }, {
       items,
-      // Anchor at this badge's glyph (falls back to the row's text line).
-      anchor: 'task',
-      onAction: (id, { row }) => {
+      onAction: (id) => {
         if (id.startsWith('status:')) {
           const status = id.slice('status:'.length)
           row.outline.transaction({ label: 'Edit Task' }, () => {
