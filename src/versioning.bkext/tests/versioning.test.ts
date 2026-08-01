@@ -105,7 +105,7 @@ describe('versioning: marker attribute', () => {
     })
     assert.equal(root.getAttribute('versioned'), '1')
     assert.equal(root.getAttribute('version'), 'v1')
-    const list = JSON.parse(root.getAttribute('versionlist'))
+    const list = JSON.parse(root.getAttribute('versionlist')!)
     assert.equal(list[0].name, 'Version 1')
   })
 })
