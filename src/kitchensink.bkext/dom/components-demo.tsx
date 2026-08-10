@@ -1,5 +1,5 @@
 import { DOMExtensionContext } from 'bike/dom'
-import { Box, SFSymbol, Button, Label, FormRow, SegmentedControl } from 'bike/components'
+import { Box, SFSymbol, Button, Label, FormRow, SegmentedControl, RadioGroup } from 'bike/components'
 import { createRoot } from 'react-dom/client'
 import { useState } from 'react'
 
@@ -14,6 +14,10 @@ function Demo() {
     { value: 'two', label: 'Two' },
     { value: 'three', label: 'Three' },
   ]
+  // Two independent groups, neither passing `name` — they must not capture each
+  // other's clicks. That's what RadioGroup's generated per-instance name is for.
+  const [choice, setChoice] = useState('pie')
+  const [shipping, setShipping] = useState('standard')
 
   return (
     <div style={{ padding: 24, maxWidth: 600, margin: '0 auto' }}>
@@ -87,6 +91,17 @@ function Demo() {
           <Label font="caption">Caption</Label>
           <Label font="footnote" color="secondary">Footnote, secondary</Label>
         </div>
+        {/* The other sizing axis: control sizes, as Interface Builder shows
+            them. `large` matches `regular` on purpose — AppKit scales a large
+            control's metrics, not its text. The last row shows the two axes
+            composing: headline's weight at small's size. */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8 }}>
+          <Label size="large">size="large" (13px, same as regular)</Label>
+          <Label size="regular">size="regular" (13px)</Label>
+          <Label size="small">size="small" (11px)</Label>
+          <Label size="mini">size="mini" (9px)</Label>
+          <Label font="headline" size="small">font="headline" size="small" (semibold 11px)</Label>
+        </div>
       </Section>
 
       {/* SegmentedControl */}
@@ -116,6 +131,34 @@ function Demo() {
             onChange={setSegment}
           />
         </div>
+      </Section>
+
+      {/* RadioGroup */}
+      <Section title="RadioGroup">
+        <div style={{ display: 'flex', gap: 40, alignItems: 'flex-start' }}>
+          <RadioGroup
+            items={[
+              { value: 'pie', label: 'Pie chart' },
+              { value: 'fraction', label: 'Fraction' },
+              { value: 'none', label: 'None' },
+            ]}
+            value={choice}
+            onChange={setChoice}
+          />
+          <RadioGroup
+            items={[
+              { value: 'standard', label: 'Standard' },
+              { value: 'express', label: 'Express' },
+            ]}
+            value={shipping}
+            onChange={setShipping}
+          />
+        </div>
+        <Row>
+          <Label color="secondary" font="caption">
+            selected: {choice} / {shipping} — two groups, no `name` passed, independent
+          </Label>
+        </Row>
       </Section>
 
       {/* FormRow */}
