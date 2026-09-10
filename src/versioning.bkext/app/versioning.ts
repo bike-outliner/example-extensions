@@ -37,7 +37,7 @@ function newId(): string {
 }
 
 function storeKey(root: Row): string {
-  return 'versions:' + root.ensuredPersistentId
+  return 'versions:' + root.ensurePersistentId()
 }
 
 // Snapshot the current live children (never the root itself).

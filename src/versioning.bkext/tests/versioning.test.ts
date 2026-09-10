@@ -14,8 +14,8 @@ describe('versioning: snapshot round-trip', () => {
 
   const root = outline.root.firstChild!
   // Give children persistent ids so we can assert they survive the round-trip.
-  const pidA = root.firstChild!.ensuredPersistentId
-  const pidB = root.lastChild!.ensuredPersistentId
+  const pidA = root.firstChild!.ensurePersistentId()
+  const pidB = root.lastChild!.ensurePersistentId()
 
   it('archives the live children (not the root)', () => {
     const archive = new Outline(root.children).archive('bike')
@@ -69,7 +69,7 @@ describe('versioning: persistentMetadata store', () => {
   const outline = bike.testOutline()
   outline.insertRows([{ text: 'Root' }], outline.root)
   const root = outline.root.firstChild!
-  const key = 'versions:' + root.ensuredPersistentId
+  const key = 'versions:' + root.ensurePersistentId()
 
   it('stores and retrieves the version store object', () => {
     const store = {
