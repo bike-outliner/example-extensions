@@ -1,0 +1,124 @@
+{
+  "metadata": {
+    "version": "0.1.0",
+    "author": "Jesse Grosjean",
+    "appearance": "light"
+  },
+  "colors": {
+    "paper": "#FCFAF2",
+    "ink": "#22262F",
+
+    "paperRule": "rgba(86, 132, 196, 0.38)",
+    "paperMargin": "rgba(198, 92, 84, 0.55)",
+
+    "text": "$ink",
+    "background": "$paper",
+    "accent": "#3E6FB0",
+    "caret": "#2B4F86",
+    "caretLine": "rgba(86, 132, 196, 0.07)",
+    "textBackgroundSelected": "rgba(86, 132, 196, 0.26)",
+    "blockBackgroundSelected": "rgba(86, 132, 196, 0.16)",
+    "findMatch": "rgba(214, 168, 62, 0.34)",
+    "handle": "rgba(34, 38, 47, 0.42)",
+    "handleUnloaded": "rgba(34, 38, 47, 0.22)",
+    "guideLine": "rgba(34, 38, 47, 0.10)",
+    "focusArrow": "rgba(34, 38, 47, 0.40)",
+    "spelling": "#C65C54",
+    "grammar": "#5A7D3A",
+
+    "themeDesk": "#E3DED0",
+    "themeInactiveDesk": "#EAE6DA",
+    "themeDivider": "rgba(34, 38, 47, 0.16)"
+  },
+  "materials": {
+    "window": {
+      "fill": {
+        "type": "active",
+        "active": "$themeDesk",
+        "inactive": "$themeInactiveDesk"
+      }
+    },
+    "titlebar": {},
+    "sidebar": {},
+    "editorPane": {
+      "fill": "$paper",
+      "cornerRadius": {
+        "topLeading": 8
+      },
+      "borders": {
+        "leading": "$themeDivider",
+        "top": "$themeDivider",
+        "trailing": "$themeDivider"
+      }
+    },
+    "editor": {
+      "fill": "$paper"
+    },
+    "editorToolbar": {
+      "fill": "$paper",
+      "borders": {
+        "bottom": "$themeDivider"
+      }
+    },
+    "editorPanel": {
+      "fill": "$paper",
+      "borders": {
+        "top": "$themeDivider"
+      }
+    },
+    "editorStatusBar": {
+      "fill": "$paper",
+      "borders": {
+        "top": "$themeDivider"
+      }
+    },
+    "inspector": {
+      "fill": "$paper",
+      "borders": {
+        "top": "$themeDivider"
+      }
+    }
+  },
+  "rows": {
+    "heading": {
+      "color": "$ink",
+      "fontWeight": "bold"
+    },
+    "note": {
+      "color": "rgba(34, 38, 47, 0.62)",
+      "fontTraits": ["italic"]
+    },
+    "blockquote": {
+      "color": "rgba(34, 38, 47, 0.75)",
+      "fontTraits": ["italic"]
+    },
+    "codeblock": {
+      "color": "#3A5E3A",
+      "fontTraits": ["monospace"]
+    },
+    "horizontalRule": {
+      "color": "rgba(34, 38, 47, 0.25)"
+    }
+  },
+  "runs": {
+    "strong": {
+      "fontWeight": "bold"
+    },
+    "emphasis": {
+      "fontTraits": ["italic"]
+    },
+    "code": {
+      "color": "#3A5E3A",
+      "fontTraits": ["monospace"]
+    },
+    "mark": {
+      "backgroundColor": "rgba(214, 168, 62, 0.30)"
+    },
+    "link": {
+      "color": "#2B4F86",
+      "underline": {
+        "single": true
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "../../node_modules/@bike-outliner/extension-kit/schemas/manifest.schema.json",
+  "description": "Ruled notebook paper: a uniform grid of horizontal rules with text sitting on them",
+  "author": "Jesse Grosjean",
+  "url": "https://github.com/bike-outliner/example-extensions/tree/main/src/lined-paper.bkext",
+  "version": "0.1.0",
+  "api_version": "0.0.0",
+  "permissions": [],
+  "host_permissions": []
+}
