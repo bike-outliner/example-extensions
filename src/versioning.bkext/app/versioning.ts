@@ -1,27 +1,21 @@
 import { Outline, OutlineEditor, Row } from 'bike/app'
 
-// Branch versioning core. A "versioned" branch is a row whose subtree can be
-// captured as named snapshots and swapped in place.
+// Branch versioning: a versioned row's children can be saved as named
+// snapshots and swapped in place. Storage is split on purpose:
 //
-// Storage is split into two places on purpose:
+//   • Row attributes on the versioned root (undoable, usable by badges):
+//       - `versioned`     marker for `.@versioned`
+//       - `version`       id of the live version
+//       - `versionlist`   JSON `[{id,name,created}]` index
+//     The active pointer is an attribute so a switch is undo-atomic.
 //
-//   • Row attributes on the versioned root (undoable, travel with the row, and
-//     usable as badge `where`/`inputs`):
-//       - `versioned`     the marker enabling `.@versioned` selection
-//       - `version`       id of the version currently live in the subtree
-//       - `versionlist`   JSON `[{id,name,created}]` index (names only)
-//     Keeping the active pointer in an attribute (not metadata) is what makes a
-//     switch undo-atomic: the structural swap and the pointer revert together.
-//
-//   • persistentMetadata key `versions:<root.persistentId>` — the full source
-//     of truth, saved in file frontmatter:
+//   • persistentMetadata `versions:<root.persistentId>`, the source of truth:
 //       { active, index:[{id,name,created}], blobs:{ <id>:{data,format} } }
-//     The heavy archive blobs must NOT live in a data-* attribute (that bloats
-//     the text model and is re-parsed on every render), so they live here.
+//     Blobs must not live in a data-* attribute (bloats the text model and is
+//     re-parsed on every render).
 //
-// The live children of the versioned root are the working copy. The root row
-// itself is never archived/removed/reinserted — only its children are — so the
-// root's persistentId, attributes, and inbound links stay stable across swaps.
+// Only the root's children are swapped, so the root's persistentId,
+// attributes and inbound links stay stable.
 
 const VERSIONED = 'versioned'
 const ACTIVE = 'version'
@@ -51,8 +45,7 @@ function loadStore(root: Row): VersionStore | undefined {
   return raw as unknown as VersionStore
 }
 
-// Persist the store as the source of truth and mirror the render/undo cache
-// (versioned + active + index) into row attributes, all in one transaction.
+// Persist the store and mirror versioned/active/index into row attributes in one transaction.
 function saveStore(root: Row, store: VersionStore): void {
   root.outline.persistentMetadata.set(storeKey(root), store as any)
   root.setAttribute(VERSIONED, '1')
@@ -274,8 +267,8 @@ export async function deleteVersion(
   })
   if (result.button !== 'Delete') return false
 
-  // If deleting the active version, switch to a neighbor first (this also runs
-  // the dirty-check prompt), then delete from a freshly reloaded store.
+  // Deleting the active version: switch to a neighbor first (runs the dirty
+  // prompt), then delete from a reloaded store.
   if (activeId(root, store) === targetId) {
     const idx = store.index.findIndex((v) => v.id === targetId)
     const fallback = store.index[idx + 1] ?? store.index[idx - 1]

@@ -1,8 +1,7 @@
 import { Outline } from 'bike/app'
 
-// These tests exercise the load-bearing primitives the versioning feature is
-// built on. The command flows themselves (toggle/save/switch) are interactive
-// (showAlert/showChoiceBox) and are verified manually / via the MCP bridge.
+// Tests the primitives versioning relies on. The interactive command flows
+// (toggle/save/switch) are verified manually.
 
 describe('versioning: snapshot round-trip', () => {
   const outline = bike.testOutline()
@@ -48,8 +47,7 @@ describe('versioning: snapshot round-trip', () => {
     assert.equal(root.children.length, 2, 'both children restored')
     assert.equal(root.firstChild!.text.string, 'Child A')
     assert.equal(root.lastChild!.text.string, 'Child B')
-    // Because no live copy existed at insert time, uniquify does not fire and
-    // the original persistent ids come back unchanged.
+    // No live copy existed at insert time, so ids are not uniquified.
     assert.equal(root.firstChild!.persistentId, pidA, 'Child A persistentId preserved')
     assert.equal(root.lastChild!.persistentId, pidB, 'Child B persistentId preserved')
   })

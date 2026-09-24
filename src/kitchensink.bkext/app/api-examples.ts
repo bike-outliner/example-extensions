@@ -1,10 +1,7 @@
 import { CommandContext, PanelHandle } from 'bike/app'
 import { PanelDemoProtocol, SessionDropDemoProtocol } from '../dom/protocols'
 
-// Runnable homes for the API examples that used to live as `@example` blocks
-// in extension-kit's .d.ts docs — here they compile and run, so they can't
-// rot. Each demo names the API it demonstrates; keep them minimal and close
-// to what a first-time reader of that API needs.
+// Runnable API examples: each demo names the API it shows. Keep them minimal.
 
 export function registerApiExamples() {
   bike.commands.addCommands({
@@ -19,10 +16,8 @@ export function registerApiExamples() {
   })
 }
 
-// bike.systemLocale / bike.formatDate / bike.encodeValue / bike.decodeValue —
-// the locale constants, the pattern formatter, and the machine-facing wire
-// codecs, side by side so the roles read clearly: Intl + formatDate make
-// human labels, encode/decode make and read attribute WIRE strings.
+// bike.systemLocale / formatDate / encodeValue / decodeValue: Intl and
+// formatDate make human labels; encode/decode make and read attribute wire strings.
 async function valueCodecDemo(): Promise<boolean> {
   const now = new Date()
   const lines = [
@@ -55,8 +50,7 @@ function defaultsDemo(context: CommandContext): boolean {
   })
   const value = bike.defaults.get('theme')
   bike.defaults.set('theme', value === 'dark' ? 'light' : 'dark')
-  // A real extension keeps its observer for its lifetime; the demo's has
-  // done its job once the change above is reported.
+  // A real extension keeps its observer for its lifetime.
   setTimeout(() => observer.dispose(), 4000)
   return true
 }
@@ -75,10 +69,9 @@ function keychainDemo(context: CommandContext): boolean {
   return true
 }
 
-// bike.showChoiceBox — the fuzzy picker. The default source shows item
-// `symbol`s, a `container` category, and a `defaultSymbol` fallback; typing
-// ">" switches to a second, LAZY source whose items are built only on first
-// activation (so an expensive list costs nothing unless triggered).
+// bike.showChoiceBox: the default source shows `symbol`, `container` and a
+// `defaultSymbol` fallback. Typing ">" switches to a lazy source whose items
+// are built only on first activation.
 async function choiceBoxDemo(context: CommandContext): Promise<boolean> {
   const result = await bike.showChoiceBox([
     {
@@ -101,8 +94,7 @@ async function choiceBoxDemo(context: CommandContext): Promise<boolean> {
     },
   ])
   if (result !== null) {
-    // `indices` index the ACTIVE source's items; `prefix` says which source
-    // that was (null = the default one).
+    // `indices` index the active source's items; `prefix` names it (null = default).
     const picked = result.items.map((item) => item.name).join(', ')
     context.editor?.showStatusMessage(
       `Picked ${picked} (indices [${result.indices.join(', ')}], source ${result.prefix ?? 'default'})`,
@@ -112,10 +104,9 @@ async function choiceBoxDemo(context: CommandContext): Promise<boolean> {
   return true
 }
 
-// bike.showPanel WITHOUT a window argument — a standalone panel tied to no
-// document, open until disposed or closed. The `id` autosaves its frame, so
-// reopening restores where the user left it (no `frame` given: the first
-// open centers on the main screen).
+// bike.showPanel without a window argument: a standalone panel, open until
+// disposed or closed. The `id` autosaves its frame; with no `frame`, the
+// first open centers on the main screen.
 async function panelStandaloneDemo(): Promise<boolean> {
   const handle: PanelHandle<PanelDemoProtocol> = await bike.showPanel<PanelDemoProtocol>({
     id: 'kitchensink:panel-standalone',
@@ -127,8 +118,7 @@ async function panelStandaloneDemo(): Promise<boolean> {
   return true
 }
 
-// The DOM-context examples — bike.session streaming and bike:rowdrop —
-// live in dom/session-drop-demo.tsx; this just opens that panel.
+// bike.session streaming and bike:rowdrop examples live in dom/session-drop-demo.tsx.
 async function sessionDropDemo(): Promise<boolean> {
   await bike.showPanel<SessionDropDemoProtocol>({
     id: 'kitchensink:session-drop-demo',

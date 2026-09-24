@@ -1,7 +1,6 @@
 import { defineEditorStyleModifier } from 'bike/style'
 
-// Draw a subtle accent rule to the left of a versioned branch root, so a
-// versioned branch is identifiable even when its badge card is closed.
+// Accent rule left of a versioned branch root, visible even when its badge card is closed.
 const modifier = defineEditorStyleModifier('versioning', 'Versioning')
 
 modifier.layer('row-formatting', (row) => {

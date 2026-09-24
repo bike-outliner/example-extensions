@@ -1,10 +1,8 @@
 import { Image, MenuItem, OutlineEditor, Row, SymbolConfiguration } from 'bike/app'
 import { VersionMeta, deleteVersion, renameVersion, saveVersion, switchVersion, toggleVersioning } from './versioning'
 
-// On-row indicator + switcher for versioned branches. `render` is pure — it
-// draws only the glyph — while clicking shows a menu (built from the
-// mirrored `@version`/`@versionlist` attributes at click time) whose
-// radio/actions route back through the shared command functions.
+// Versioned-branch badge. `render` draws only the glyph; clicking builds a menu
+// from the `@version`/`@versionlist` attributes and routes to the shared commands.
 export function registerVersioningBadge() {
   bike.badge('versioning', {
     where: '.@versioned',
@@ -37,9 +35,7 @@ function showVersionsMenu(editor: OutlineEditor, row: Row) {
       title: active ? `${active.name} · ${list.length} version${list.length === 1 ? '' : 's'}` : 'Versions',
       enabled: false,
     },
-    // Radio group from checked buttons: the active version carries the
-    // checkmark; choosing routes through onAction with the id encoding
-    // the version.
+    // Radio group: the active version is checked; ids encode the version.
     ...list.map(
       (v): MenuItem => ({
         type: 'button',

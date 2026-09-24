@@ -31,7 +31,6 @@ export async function activate(context: AppExtensionContext) {
     },
   })
 
-  // Demos that used to live as @example blocks in the API docs.
   registerApiExamples()
 }
 

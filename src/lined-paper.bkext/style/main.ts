@@ -12,18 +12,10 @@ import {
 
 const modifier = defineEditorStyleModifier('lined-paper', 'Lined Paper')
 
-/**
- * Tile width. A pattern repeats on both axes, so this only sets how often the
- * horizontal seam recurs — the rule spans the tile edge to edge, so the line
- * reads as continuous at any width.
- */
+/** Tile width; the rule spans the tile edge to edge, so it reads as continuous at any width. */
 const TILE_WIDTH = 512
 
-/**
- * Where the hairline sits inside its tile, 0..1. This is the knob that decides
- * whether text sits on the rules or floats above them: it slides the rule
- * within the line box without moving the grid off the row boxes.
- */
+/** Hairline position within its line box, 0..1: decides whether text sits on the rules or above them. */
 const RULE_POSITION = 0
 
 /** Margin rule position, as a fraction of one indent left of the text column. */
@@ -48,11 +40,8 @@ interface Paper {
 }
 
 /**
- * Paper metrics, derived once per editor state from the *base* font.
- *
- * Seeded from the viewport rule, which runs before any row rule and whose font
- * is the settings font after Bike's font-scaling tiers. Row rules then read the
- * same numbers, so a heading can't derive a different grid.
+ * Paper metrics, cached per editor state from the base font. Seeded by the
+ * viewport rule (which runs before row rules), so a heading can't derive a different grid.
  */
 function paper(context: StyleContext, baseFont: Font, padding?: Insets): Paper {
   const cached = context.userCache.get('linedPaper') as Paper | undefined
@@ -88,9 +77,8 @@ function ruleTile(p: Paper): Image {
   const shape = new Shape(Path.rect(new Rect(0, 0, TILE_WIDTH, p.hairline)))
   shape.fill.color = p.rule
   shape.line.width = 0
-  // Image.fromShape sizes the image to the path's drawn bounds, so the tile's
-  // full height comes from padding — split above and below the hairline to
-  // place the rule within the line box.
+  // Image.fromShape sizes to the path's bounds, so padding supplies the tile's
+  // full height, split above and below the hairline.
   const slack = Math.max(0, p.pitch - p.hairline)
   const above = Math.round(slack * RULE_POSITION)
   shape.padding = new Insets(above, 0, slack - above, 0)
@@ -98,13 +86,9 @@ function ruleTile(p: Paper): Image {
 }
 
 /**
- * Paints the ruling over one top-level row's box.
- *
- * The grid cannot live on the root row: `EditorStyle.prepareStyledRow` returns
- * a hardcoded default style for the root and never runs stylesheet rules
- * against it, so the root carries no decorations. Top-level rows are the
- * largest boxes a rule can attach to. Their phases stay in step because the
- * rhythm lock below makes every branch a whole multiple of `pitch` tall.
+ * Paints the ruling over one top-level row's box. The root row never runs
+ * stylesheet rules, so top-level rows are the largest boxes available; their
+ * phases stay in step because every branch is a whole multiple of `pitch` tall.
  */
 function ruleBand(row: any, p: Paper, tailHeight: number) {
   const tile = ruleTile(p)
@@ -173,9 +157,8 @@ modifier.layer('base', (row, run, caret, viewport) => {
   })
 })
 
-// Pin every row back to the base point size. Bike's row formatting has already
-// run by this layer, so headings keep their weight and notes their italics —
-// but a taller line box anywhere would break the grid.
+// Pin rows to the base point size (after Bike's row formatting, so headings
+// keep weight and notes italics); a taller line box would break the grid.
 modifier.layer('row-formatting', (row) => {
   row(`.*`, (context, row) => {
     const p = paper(context, row.text.font)

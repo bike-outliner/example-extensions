@@ -46,9 +46,7 @@ async function showKanban(context: CommandContext): Promise<boolean> {
       let card = outline.getRowById(message.cardId)
       let column = outline.getRowById(message.toColumnId)
       if (card && column) {
-        // The library reports toIndex in the list after removing the card.
-        // When moving forward in the same column, offset by +1 to get the
-        // correct position in the original children array.
+        // toIndex is post-removal; offset +1 when moving forward in the same column.
         let index = message.toIndex
         let sameColumn = message.fromColumnId === message.toColumnId
         if (sameColumn && index > message.fromIndex) {

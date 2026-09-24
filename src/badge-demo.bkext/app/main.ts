@@ -1,15 +1,10 @@
 import { Image, MenuItem, SymbolConfiguration } from 'bike/app'
 
-// Menu demo: one badge whose onClick presents a menu exercising the item
-// vocabulary (the menu vocabulary in `bike/app`'s menu.d.ts — buttons and
-// separators; menus are static native snapshots). Add a `task` attribute to
-// any row and click the checklist badge.
-//
-// The badge itself is decoration only — `render` returns the glyph. The
-// menu is built imperatively in `onClick` by reading the row, and its
-// handler is per-presentation: buttons report through `onAction(id, ctx)`,
-// or dispatch a command via the `command:<id>` id convention.
-// Checkbox/radio semantics come from buttons with `state: 'on'`.
+// Menu demo: add a `task` attribute to any row and click the checklist badge.
+// Menus (see `bike/app` menu.d.ts) are static native snapshots of buttons and
+// separators. `render` returns only the glyph; the menu is built in `onClick`
+// from the row. Buttons report through `onAction(id, ctx)` or dispatch a
+// command via a `command:<id>` id. Checkbox/radio state comes from `state: 'on'`.
 
 bike.badge('task', {
   where: '.@task',
@@ -31,11 +26,9 @@ bike.badge('task', {
         })
       ),
       { type: 'separator' },
-      // Buttons route to onAction — except `command:<id>` ids, which
-      // dispatch the registered command with this row as its selection
-      // (unregistered commands are hidden from the menu; see
-      // `bike.commands.toString()`). To filter, use an onAction button
-      // that sets `editor.filter`.
+      // `command:<id>` ids dispatch that command with this row selected
+      // (unregistered commands are hidden; see `bike.commands.toString()`).
+      // To filter, use an onAction button that sets `editor.filter`.
       { type: 'button', id: 'command:edit:copy-row-link', title: 'Copy Row Link' },
       { type: 'button', id: 'clear', title: 'Clear Task' },
     ]
