@@ -5,7 +5,7 @@ export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window: Window) => {
     const handle = await window.inspector.addItem<LookupProtocol>({
       id: 'lookup',
-      label: 'Lookup',
+      label: bike.localize('Lookup'),
       script: 'Lookup.js',
     })
 

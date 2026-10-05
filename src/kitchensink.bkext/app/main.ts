@@ -9,12 +9,12 @@ export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window) => {
     await window.inspector.addItem({
       id: 'details',
-      label: 'Details',
+      label: bike.localize('Details'),
       script: 'inspector-details.js',
     })
     await window.inspector.addItem({
       id: 'options',
-      label: 'Options',
+      label: bike.localize('Options'),
       script: 'inspector-options.js',
     })
   })

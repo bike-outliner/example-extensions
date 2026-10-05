@@ -1,6 +1,6 @@
 import { Color, Image, defineEditorStyle } from 'bike/style'
 
-let style = defineEditorStyle('kitchensink', 'Kitchen Sink')
+let style = defineEditorStyle('kitchensink', bike.localize('Kitchen Sink'))
 
 // ============================================================================
 // Color API Demo - Color spaces, mixing, and contrast selection

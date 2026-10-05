@@ -6,7 +6,7 @@ export async function activate(context: AppExtensionContext) {
 
   bike.settings.addItem({
     id: 'settings',
-    label: 'Settings Example',
+    label: bike.localize('Settings Example'),
     script: 'Settings.js',
   })
 

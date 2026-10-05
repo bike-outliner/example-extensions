@@ -4,7 +4,7 @@ export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window: Window) => {
     await window.inspector.addItem({
       id: 'todos',
-      label: 'Todos',
+      label: bike.localize('Todos'),
       script: 'Todos.js',
     })
   })

@@ -1,6 +1,6 @@
 import { Color, Image, SymbolConfiguration, defineEditorStyle, Insets, Font } from 'bike/style'
 
-let style = defineEditorStyle('tutorial', 'Tutorial')
+let style = defineEditorStyle('tutorial', bike.localize('Tutorial'))
 
 style.layer('base', (row, run, caret, viewport, include) => {
   row(`.*`, (context, row) => {
