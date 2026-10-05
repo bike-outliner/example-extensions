@@ -8,10 +8,12 @@ export async function activate(context: AppExtensionContext) {
   extensionContext = context
   bike.observeWindows(async (window) => {
     await window.inspector.addItem({
+      id: 'details',
       label: 'Details',
       script: 'inspector-details.js',
     })
     await window.inspector.addItem({
+      id: 'options',
       label: 'Options',
       script: 'inspector-options.js',
     })

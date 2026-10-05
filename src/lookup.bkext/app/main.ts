@@ -4,6 +4,7 @@ import { LookupProtocol } from '../dom/protocols'
 export async function activate(context: AppExtensionContext) {
   bike.observeWindows(async (window: Window) => {
     const handle = await window.inspector.addItem<LookupProtocol>({
+      id: 'lookup',
       label: 'Lookup',
       script: 'Lookup.js',
     })

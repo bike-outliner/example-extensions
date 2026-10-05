@@ -5,6 +5,7 @@ export async function activate(context: AppExtensionContext) {
   bike.defaults.registerDefaults(settingsDefaults)
 
   bike.settings.addItem({
+    id: 'settings',
     label: 'Settings Example',
     script: 'Settings.js',
   })
